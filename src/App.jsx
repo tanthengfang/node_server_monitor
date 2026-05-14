@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const bwData = [
   { time: "2026-04-15 05:32:35", server: "香港-免费6", usage: "52.51%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
@@ -338,23 +338,14 @@ const COUNTRIES = [
 const ALERT_TYPES = ["疑似不通", "延迟超标", "丢包"];
 const ISPS        = ["联通", "电信", "移动"];
 
-const NTO_PAGE_SIZE = 20;
-
 function NodeTriggerOverviewTab() {
   const [alertType, setAlertType] = useState(null);
   const [isp, setIsp] = useState(null);
-  const [page, setPage] = useState(1);
 
   const filtered = ntoData.filter(r =>
     (!alertType || r.alertType === alertType) &&
     (!isp || r.isp === isp)
   );
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / NTO_PAGE_SIZE));
-  const pageData = filtered.slice((page - 1) * NTO_PAGE_SIZE, page * NTO_PAGE_SIZE);
-
-  function handleAlertType(val) { setAlertType(val); setPage(1); }
-  function handleIsp(val) { setIsp(val); setPage(1); }
 
   return (
     <div>
@@ -362,11 +353,11 @@ function NodeTriggerOverviewTab() {
       <div className="flex flex-col gap-2 pt-3 pb-2">
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-400 w-12 shrink-0">告警类型</span>
-          <FilterPills options={ALERT_TYPES} value={alertType} onChange={handleAlertType} />
+          <FilterPills options={ALERT_TYPES} value={alertType} onChange={setAlertType} />
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-400 w-12 shrink-0">运营商</span>
-          <FilterPills options={ISPS} value={isp} onChange={handleIsp} />
+          <FilterPills options={ISPS} value={isp} onChange={setIsp} />
         </div>
       </div>
 
@@ -383,14 +374,14 @@ function NodeTriggerOverviewTab() {
           </tr>
         </thead>
         <tbody>
-          {pageData.length === 0 ? (
+          {filtered.length === 0 ? (
             <tr>
               <td colSpan={7} className="px-3 py-8 text-center text-sm text-gray-400">
                 暂无符合条件的触发记录
               </td>
             </tr>
           ) : (
-            pageData.map((r, i) => {
+            filtered.map((r, i) => {
               const style = alertStyles[r.alertType] ?? { value: "text-gray-600" };
               return (
                 <tr key={i} className="hover:bg-gray-50">
@@ -407,125 +398,12 @@ function NodeTriggerOverviewTab() {
           )}
         </tbody>
       </table>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-between pt-3 mt-1 border-t border-gray-100">
-        <span className="text-xs text-gray-400">
-          共 {filtered.length} 条，第 {page} / {totalPages} 页
-        </span>
-        <div className="flex items-center gap-1">
-          <button onClick={() => setPage(1)} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">«</button>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">‹</button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
-            <button key={n} onClick={() => setPage(n)}
-              className={`px-2.5 py-1 text-xs rounded border transition-colors ${
-                n === page ? "bg-amber-500 text-white border-amber-500" : "border-gray-200 text-gray-500 hover:bg-gray-50"
-              }`}>{n}</button>
-          ))}
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">›</button>
-          <button onClick={() => setPage(totalPages)} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">»</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DateTimeRangePicker({ value, onChange }) {
-  const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState(value);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  function handleApply() {
-    onChange(draft);
-    setOpen(false);
-  }
-
-  function handleCancel() {
-    setDraft(value);
-    setOpen(false);
-  }
-
-  function fmtDisplay(iso) {
-    return iso.replace("T", " ");
-  }
-
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => { setDraft(value); setOpen(o => !o); }}
-        className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50"
-      >
-        <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/>
-          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5"/>
-          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5"/>
-          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5"/>
-        </svg>
-        {fmtDisplay(value.start)} — {fmtDisplay(value.end)}
-      </button>
-
-      {open && (
-        <div className="absolute right-0 top-full mt-1.5 z-50 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-72">
-          <p className="text-xs font-medium text-gray-500 mb-3">选择时间范围</p>
-
-          <div className="flex flex-col gap-3">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">开始时间</label>
-              <input
-                type="datetime-local"
-                value={draft.start}
-                max={draft.end}
-                onChange={e => setDraft(d => ({ ...d, start: e.target.value }))}
-                className="w-full text-sm border border-gray-200 rounded-lg px-2.5 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">结束时间</label>
-              <input
-                type="datetime-local"
-                value={draft.end}
-                min={draft.start}
-                onChange={e => setDraft(d => ({ ...d, end: e.target.value }))}
-                className="w-full text-sm border border-gray-200 rounded-lg px-2.5 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              onClick={handleCancel}
-              className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"
-            >
-              取消
-            </button>
-            <button
-              onClick={handleApply}
-              className="px-3 py-1.5 text-xs rounded-lg bg-amber-500 text-white hover:bg-amber-600"
-            >
-              确认
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 export default function ServerTriggerRecords() {
   const [activeTab, setActiveTab] = useState(0);
-  const [dateRange, setDateRange] = useState({ start: "2026-03-17T00:00", end: "2026-04-15T23:59" });
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-6 font-sans">
@@ -535,7 +413,15 @@ export default function ServerTriggerRecords() {
 
       {/* Toolbar */}
       <div className="flex justify-end items-center gap-2 mb-4">
-        <DateTimeRangePicker value={dateRange} onChange={setDateRange} />
+        <button className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/>
+            <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5"/>
+            <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5"/>
+            <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5"/>
+          </svg>
+          2026-03-17 — 2026-04-15
+        </button>
         <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5"/>
