@@ -371,12 +371,13 @@ function NodeTriggerOverviewTab() {
             <Th>运营商</Th>
             <Th>数值</Th>
             <Th>触发时间</Th>
+            <Th>操作</Th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={7} className="px-3 py-8 text-center text-sm text-gray-400">
+              <td colSpan={8} className="px-3 py-8 text-center text-sm text-gray-400">
                 暂无符合条件的触发记录
               </td>
             </tr>
@@ -392,6 +393,7 @@ function NodeTriggerOverviewTab() {
                   <Td className="text-gray-500">{r.isp}</Td>
                   <Td className={`whitespace-nowrap font-medium ${style.value}`}>{r.value}</Td>
                   <Td className="text-gray-400 whitespace-nowrap">{r.triggeredAt}</Td>
+                  <Td><LinkBtn>查看节点详情</LinkBtn></Td>
                 </tr>
               );
             })
@@ -498,39 +500,39 @@ export default function ServerTriggerRecords() {
       <h2 className="text-lg font-medium text-gray-900 mb-1">服务器触发记录</h2>
       <p className="text-sm text-gray-400 mb-4">当指标超过阈值时记录触发告警</p>
 
-      {/* Toolbar */}
-      <div className="flex justify-end items-center gap-2 mb-4">
-        <DateTimeRangePicker value={dateRange} onChange={setDateRange} />
-        <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5"/>
-            <line x1="8" y1="12" x2="16" y2="12" strokeWidth="1.5"/>
-            <line x1="11" y1="18" x2="13" y2="18" strokeWidth="1.5"/>
-          </svg>
-        </button>
-        <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-          列
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="6 9 12 15 18 9" strokeWidth="2"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex border-b border-gray-100 mb-0">
-        {TABS.map((tab, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveTab(i)}
-            className={`px-5 py-2.5 text-sm whitespace-nowrap border-b-2 -mb-px transition-colors ${
-              activeTab === i
-                ? "border-amber-500 text-amber-600 font-medium"
-                : "border-transparent text-gray-400 hover:text-gray-700"
-            }`}
-          >
-            {tab}
+      {/* Tabs + Toolbar row */}
+      <div className="flex items-end justify-between border-b border-gray-100">
+        <div className="flex">
+          {TABS.map((tab, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveTab(i)}
+              className={`px-5 py-2.5 text-sm whitespace-nowrap border-b-2 -mb-px transition-colors ${
+                activeTab === i
+                  ? "border-amber-500 text-amber-600 font-medium"
+                  : "border-transparent text-gray-400 hover:text-gray-700"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2 pb-1.5">
+          <DateTimeRangePicker value={dateRange} onChange={setDateRange} />
+          <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5"/>
+              <line x1="8" y1="12" x2="16" y2="12" strokeWidth="1.5"/>
+              <line x1="11" y1="18" x2="13" y2="18" strokeWidth="1.5"/>
+            </svg>
           </button>
-        ))}
+          <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
+            列
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" strokeWidth="2"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Table */}
