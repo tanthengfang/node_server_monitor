@@ -402,8 +402,95 @@ function NodeTriggerOverviewTab() {
   );
 }
 
+function DateTimeRangePicker({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState(value);
+
+  function toInputVal(dt) {
+    return dt.replace(" ", "T").slice(0, 16);
+  }
+
+  function fromInputVal(v) {
+    return v.replace("T", " ") + ":00";
+  }
+
+  function formatDisplay(dt) {
+    return dt.slice(0, 16).replace("T", " ");
+  }
+
+  function handleApply() {
+    onChange(draft);
+    setOpen(false);
+  }
+
+  function handleCancel() {
+    setDraft(value);
+    setOpen(false);
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/>
+          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5"/>
+          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5"/>
+          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5"/>
+        </svg>
+        {formatDisplay(value.start)} — {formatDisplay(value.end)}
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-72">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-gray-400">开始时间</label>
+              <input
+                type="datetime-local"
+                value={toInputVal(draft.start)}
+                onChange={e => setDraft(d => ({ ...d, start: fromInputVal(e.target.value) }))}
+                className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-gray-400">结束时间</label>
+              <input
+                type="datetime-local"
+                value={toInputVal(draft.end)}
+                onChange={e => setDraft(d => ({ ...d, end: fromInputVal(e.target.value) }))}
+                className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-1">
+              <button
+                onClick={handleCancel}
+                className="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleApply}
+                className="px-3 py-1 text-xs rounded-lg bg-amber-500 text-white hover:bg-amber-600"
+              >
+                确认
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ServerTriggerRecords() {
   const [activeTab, setActiveTab] = useState(0);
+  const [dateRange, setDateRange] = useState({
+    start: "2026-03-17 00:00:00",
+    end: "2026-04-15 23:59:59",
+  });
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-6 font-sans">
@@ -413,15 +500,7 @@ export default function ServerTriggerRecords() {
 
       {/* Toolbar */}
       <div className="flex justify-end items-center gap-2 mb-4">
-        <button className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/>
-            <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5"/>
-            <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5"/>
-            <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5"/>
-          </svg>
-          2026-03-17 — 2026-04-15
-        </button>
+        <DateTimeRangePicker value={dateRange} onChange={setDateRange} />
         <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5"/>
