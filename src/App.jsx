@@ -1,75 +1,620 @@
 import { useState, useEffect } from "react";
 
 const bwData = [
-  { time: "2026-04-15 05:32:35", server: "香港-免费6", usage: "52.51%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-15 01:32:36", server: "美国29-KY-OVH-免费", usage: "51.36%", threshold: "50%", cap: "1500 Mbps", period: "非高峰" },
-  { time: "2026-04-15 01:17:36", server: "香港-免费6", usage: "79.32%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-14 01:17:35", server: "香港-免费6", usage: "55.96%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-13 17:42:35", server: "香港-免费6", usage: "57.52%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-13 13:47:35", server: "香港-免费6", usage: "50.72%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-13 01:17:35", server: "新加坡1-ZEN-免费", usage: "53.74%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-13 01:17:35", server: "香港-免费6", usage: "63.58%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-13 01:17:34", server: "美国29-KY-OVH-免费", usage: "55.08%", threshold: "50%", cap: "1500 Mbps", period: "非高峰" },
-  { time: "2026-04-12 17:17:36", server: "香港-免费6", usage: "53.92%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
-  { time: "2026-04-12 11:07:35", server: "香港-免费6", usage: "51.79%", threshold: "50%", cap: "500 Mbps", period: "非高峰" },
+  {
+    time: "2026-04-15 05:32:35",
+    server: "香港-免费6",
+    usage: "52.51%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-15 01:32:36",
+    server: "美国29-KY-OVH-免费",
+    usage: "51.36%",
+    threshold: "50%",
+    cap: "1500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-15 01:17:36",
+    server: "香港-免费6",
+    usage: "79.32%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-14 01:17:35",
+    server: "香港-免费6",
+    usage: "55.96%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-13 17:42:35",
+    server: "香港-免费6",
+    usage: "57.52%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-13 13:47:35",
+    server: "香港-免费6",
+    usage: "50.72%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-13 01:17:35",
+    server: "新加坡1-ZEN-免费",
+    usage: "53.74%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-13 01:17:35",
+    server: "香港-免费6",
+    usage: "63.58%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-13 01:17:34",
+    server: "美国29-KY-OVH-免费",
+    usage: "55.08%",
+    threshold: "50%",
+    cap: "1500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-12 17:17:36",
+    server: "香港-免费6",
+    usage: "53.92%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
+  {
+    time: "2026-04-12 11:07:35",
+    server: "香港-免费6",
+    usage: "51.79%",
+    threshold: "50%",
+    cap: "500 Mbps",
+    period: "非高峰",
+  },
 ];
 
 const nlData = [
-  { node: "美国-V22",           path: "美国-V22-入",         unicom: "72ms→Timeout",  telecom: "68ms→Timeout",  mobile: "75ms→Timeout",  unicomPL: "100%", telecomPL: "100%", mobilePL: "100%" },
-  { node: "香港-免费1",         path: "香港-HK1-入",         unicom: "45ms→82ms",     telecom: "38ms→152ms",    mobile: "42ms→79ms",     unicomPL: "3%",   telecomPL: "18%",  mobilePL: "2%"   },
-  { node: "日本-V1",            path: "日本-V1-入",          unicom: "88ms→Timeout",  telecom: "92ms→Timeout",  mobile: "85ms→Timeout",  unicomPL: "100%", telecomPL: "100%", mobilePL: "100%" },
-  { node: "美国-S1",            path: "美国-US5-DMIT-入",    unicom: "110ms→285ms",   telecom: "95ms→88ms",     mobile: "118ms→92ms",    unicomPL: "22%",  telecomPL: "4%",   mobilePL: "5%"   },
-  { node: "香港-免费6",         path: "香港-HK1-入",         unicom: "40ms→65ms",     telecom: "35ms→55ms",     mobile: "38ms→Timeout",  unicomPL: "1%",   telecomPL: "3%",   mobilePL: "15%"  },
-  { node: "美国29-KY-OVH-免费", path: "美国29-KY-OVH-入",    unicom: "105ms→Timeout", telecom: "98ms→Timeout",  mobile: "112ms→Timeout", unicomPL: "100%", telecomPL: "100%", mobilePL: "100%" },
-  { node: "新加坡-ZEN-免费",    path: "新加坡-SG1-入",       unicom: "62ms→75ms",     telecom: "58ms→Timeout",  mobile: "66ms→72ms",     unicomPL: "5%",   telecomPL: "34%",  mobilePL: "2%"   },
-  { node: "日本-JP2",           path: "日本-JP1-入",         unicom: "80ms→92ms",     telecom: "75ms→188ms",    mobile: "78ms→85ms",     unicomPL: "6%",   telecomPL: "3%",   mobilePL: "12%"  },
-  { node: "德国-DE1",           path: "德国-DE1-入",         unicom: "185ms→210ms",   telecom: "178ms→195ms",   mobile: "190ms→218ms",   unicomPL: "2%",   telecomPL: "1%",   mobilePL: "3%"   },
-  { node: "台湾-TW1",           path: "台湾-TW1-入",         unicom: "35ms→48ms",     telecom: "30ms→44ms",     mobile: "33ms→51ms",     unicomPL: "1%",   telecomPL: "0%",   mobilePL: "2%"   },
-  { node: "马来西亚-MY1",       path: "马来西亚-MY1-入",     unicom: "72ms→95ms",     telecom: "68ms→Timeout",  mobile: "74ms→88ms",     unicomPL: "4%",   telecomPL: "41%",  mobilePL: "3%"   },
-  { node: "意大利-IT1",         path: "意大利-IT1-入",       unicom: "198ms→225ms",   telecom: "192ms→Timeout", mobile: "205ms→230ms",   unicomPL: "3%",   telecomPL: "100%", mobilePL: "2%"   },
-  { node: "乌克兰-UA1",         path: "乌克兰-UA1-入",       unicom: "220ms→Timeout", telecom: "215ms→Timeout", mobile: "225ms→Timeout", unicomPL: "100%", telecomPL: "100%", mobilePL: "100%" },
-  { node: "泰国-TH1",           path: "泰国-TH1-入",         unicom: "58ms→72ms",     telecom: "54ms→68ms",     mobile: "60ms→75ms",     unicomPL: "2%",   telecomPL: "1%",   mobilePL: "4%"   },
-  { node: "新加坡-SG2",         path: "新加坡-SG2-入",       unicom: "65ms→78ms",     telecom: "60ms→74ms",     mobile: "63ms→80ms",     unicomPL: "1%",   telecomPL: "2%",   mobilePL: "0%"   },
-  { node: "香港-免费3",         path: "香港-HK2-入",         unicom: "42ms→58ms",     telecom: "38ms→52ms",     mobile: "44ms→61ms",     unicomPL: "2%",   telecomPL: "1%",   mobilePL: "3%"   },
-  { node: "美国-LA1",           path: "美国-LA1-入",         unicom: "128ms→155ms",   telecom: "122ms→148ms",   mobile: "130ms→162ms",   unicomPL: "5%",   telecomPL: "3%",   mobilePL: "7%"   },
-  { node: "日本-JP3",           path: "日本-JP2-入",         unicom: "85ms→98ms",     telecom: "80ms→93ms",     mobile: "88ms→102ms",    unicomPL: "1%",   telecomPL: "0%",   mobilePL: "2%"   },
-  { node: "德国-DE2",           path: "德国-DE2-入",         unicom: "190ms→Timeout", telecom: "184ms→218ms",   mobile: "195ms→222ms",   unicomPL: "100%", telecomPL: "8%",   mobilePL: "6%"   },
-  { node: "台湾-TW2",           path: "台湾-TW2-入",         unicom: "38ms→52ms",     telecom: "34ms→47ms",     mobile: "36ms→55ms",     unicomPL: "2%",   telecomPL: "1%",   mobilePL: "3%"   },
-  { node: "马来西亚-MY2",       path: "马来西亚-MY2-入",     unicom: "75ms→88ms",     telecom: "70ms→82ms",     mobile: "78ms→92ms",     unicomPL: "3%",   telecomPL: "2%",   mobilePL: "4%"   },
-  { node: "泰国-TH2",           path: "泰国-TH2-入",         unicom: "60ms→Timeout",  telecom: "56ms→71ms",     mobile: "62ms→78ms",     unicomPL: "38%",  telecomPL: "3%",   mobilePL: "5%"   },
+  {
+    node: "美国-V22",
+    path: "美国-V22-入",
+    unicom: "72ms→Timeout",
+    telecom: "68ms→Timeout",
+    mobile: "75ms→Timeout",
+    unicomPL: "100%",
+    telecomPL: "100%",
+    mobilePL: "100%",
+    unicomE2E: "310ms→Timeout",
+    telecomE2E: "295ms→Timeout",
+    mobileE2E: "320ms→Timeout",
+  },
+  {
+    node: "香港-免费1",
+    path: "香港-HK1-入",
+    unicom: "45ms→82ms",
+    telecom: "38ms→152ms",
+    mobile: "42ms→79ms",
+    unicomPL: "3%",
+    telecomPL: "18%",
+    mobilePL: "2%",
+    unicomE2E: "105ms→118ms",
+    telecomE2E: "98ms→201ms",
+    mobileE2E: "100ms→112ms",
+  },
+  {
+    node: "日本-V1",
+    path: "日本-V1-入",
+    unicom: "88ms→Timeout",
+    telecom: "92ms→Timeout",
+    mobile: "85ms→Timeout",
+    unicomPL: "100%",
+    telecomPL: "100%",
+    mobilePL: "100%",
+    unicomE2E: "380ms→Timeout",
+    telecomE2E: "395ms→Timeout",
+    mobileE2E: "372ms→Timeout",
+  },
+  {
+    node: "美国-S1",
+    path: "美国-US5-DMIT-入",
+    unicom: "110ms→285ms",
+    telecom: "95ms→88ms",
+    mobile: "118ms→92ms",
+    unicomPL: "22%",
+    telecomPL: "4%",
+    mobilePL: "5%",
+    unicomE2E: "198ms→368ms",
+    telecomE2E: "180ms→175ms",
+    mobileE2E: "205ms→198ms",
+  },
+  {
+    node: "香港-免费6",
+    path: "香港-HK1-入",
+    unicom: "40ms→65ms",
+    telecom: "35ms→55ms",
+    mobile: "38ms→Timeout",
+    unicomPL: "1%",
+    telecomPL: "3%",
+    mobilePL: "15%",
+    unicomE2E: "92ms→98ms",
+    telecomE2E: "80ms→84ms",
+    mobileE2E: "88ms→Timeout",
+  },
+  {
+    node: "美国29-KY-OVH-免费",
+    path: "美国29-KY-OVH-入",
+    unicom: "105ms→Timeout",
+    telecom: "98ms→Timeout",
+    mobile: "112ms→Timeout",
+    unicomPL: "100%",
+    telecomPL: "100%",
+    mobilePL: "100%",
+    unicomE2E: "420ms→Timeout",
+    telecomE2E: "408ms→Timeout",
+    mobileE2E: "435ms→Timeout",
+  },
+  {
+    node: "新加坡-ZEN-免费",
+    path: "新加坡-SG1-入",
+    unicom: "62ms→75ms",
+    telecom: "58ms→Timeout",
+    mobile: "66ms→72ms",
+    unicomPL: "5%",
+    telecomPL: "34%",
+    mobilePL: "2%",
+    unicomE2E: "118ms→128ms",
+    telecomE2E: "112ms→Timeout",
+    mobileE2E: "115ms→122ms",
+  },
+  {
+    node: "日本-JP2",
+    path: "日本-JP1-入",
+    unicom: "80ms→92ms",
+    telecom: "75ms→188ms",
+    mobile: "78ms→85ms",
+    unicomPL: "6%",
+    telecomPL: "3%",
+    mobilePL: "12%",
+    unicomE2E: "148ms→158ms",
+    telecomE2E: "140ms→248ms",
+    mobileE2E: "142ms→148ms",
+  },
+  {
+    node: "德国-DE1",
+    path: "德国-DE1-入",
+    unicom: "185ms→210ms",
+    telecom: "178ms→195ms",
+    mobile: "190ms→218ms",
+    unicomPL: "2%",
+    telecomPL: "1%",
+    mobilePL: "3%",
+    unicomE2E: "362ms→378ms",
+    telecomE2E: "348ms→358ms",
+    mobileE2E: "375ms→390ms",
+  },
+  {
+    node: "台湾-TW1",
+    path: "台湾-TW1-入",
+    unicom: "35ms→48ms",
+    telecom: "30ms→44ms",
+    mobile: "33ms→51ms",
+    unicomPL: "1%",
+    telecomPL: "0%",
+    mobilePL: "2%",
+    unicomE2E: "72ms→76ms",
+    telecomE2E: "65ms→68ms",
+    mobileE2E: "74ms→78ms",
+  },
+  {
+    node: "马来西亚-MY1",
+    path: "马来西亚-MY1-入",
+    unicom: "72ms→95ms",
+    telecom: "68ms→Timeout",
+    mobile: "74ms→88ms",
+    unicomPL: "4%",
+    telecomPL: "41%",
+    mobilePL: "3%",
+    unicomE2E: "140ms→152ms",
+    telecomE2E: "135ms→Timeout",
+    mobileE2E: "138ms→145ms",
+  },
+  {
+    node: "意大利-IT1",
+    path: "意大利-IT1-入",
+    unicom: "198ms→225ms",
+    telecom: "192ms→Timeout",
+    mobile: "205ms→230ms",
+    unicomPL: "3%",
+    telecomPL: "100%",
+    mobilePL: "2%",
+    unicomE2E: "388ms→405ms",
+    telecomE2E: "378ms→Timeout",
+    mobileE2E: "400ms→418ms",
+  },
+  {
+    node: "乌克兰-UA1",
+    path: "乌克兰-UA1-入",
+    unicom: "220ms→Timeout",
+    telecom: "215ms→Timeout",
+    mobile: "225ms→Timeout",
+    unicomPL: "100%",
+    telecomPL: "100%",
+    mobilePL: "100%",
+    unicomE2E: "445ms→Timeout",
+    telecomE2E: "438ms→Timeout",
+    mobileE2E: "452ms→Timeout",
+  },
+  {
+    node: "泰国-TH1",
+    path: "泰国-TH1-入",
+    unicom: "58ms→72ms",
+    telecom: "54ms→68ms",
+    mobile: "60ms→75ms",
+    unicomPL: "2%",
+    telecomPL: "1%",
+    mobilePL: "4%",
+    unicomE2E: "112ms→118ms",
+    telecomE2E: "105ms→110ms",
+    mobileE2E: "115ms→122ms",
+  },
+  {
+    node: "新加坡-SG2",
+    path: "新加坡-SG2-入",
+    unicom: "65ms→78ms",
+    telecom: "60ms→74ms",
+    mobile: "63ms→80ms",
+    unicomPL: "1%",
+    telecomPL: "2%",
+    mobilePL: "0%",
+    unicomE2E: "125ms→130ms",
+    telecomE2E: "118ms→122ms",
+    mobileE2E: "122ms→128ms",
+  },
+  {
+    node: "香港-免费3",
+    path: "香港-HK2-入",
+    unicom: "42ms→58ms",
+    telecom: "38ms→52ms",
+    mobile: "44ms→61ms",
+    unicomPL: "2%",
+    telecomPL: "1%",
+    mobilePL: "3%",
+    unicomE2E: "88ms→92ms",
+    telecomE2E: "78ms→82ms",
+    mobileE2E: "90ms→96ms",
+  },
+  {
+    node: "美国-LA1",
+    path: "美国-LA1-入",
+    unicom: "128ms→155ms",
+    telecom: "122ms→148ms",
+    mobile: "130ms→162ms",
+    unicomPL: "5%",
+    telecomPL: "3%",
+    mobilePL: "7%",
+    unicomE2E: "255ms→268ms",
+    telecomE2E: "242ms→255ms",
+    mobileE2E: "260ms→275ms",
+  },
+  {
+    node: "日本-JP3",
+    path: "日本-JP2-入",
+    unicom: "85ms→98ms",
+    telecom: "80ms→93ms",
+    mobile: "88ms→102ms",
+    unicomPL: "1%",
+    telecomPL: "0%",
+    mobilePL: "2%",
+    unicomE2E: "158ms→168ms",
+    telecomE2E: "150ms→158ms",
+    mobileE2E: "162ms→172ms",
+  },
+  {
+    node: "德国-DE2",
+    path: "德国-DE2-入",
+    unicom: "190ms→Timeout",
+    telecom: "184ms→218ms",
+    mobile: "195ms→222ms",
+    unicomPL: "100%",
+    telecomPL: "8%",
+    mobilePL: "6%",
+    unicomE2E: "372ms→Timeout",
+    telecomE2E: "365ms→385ms",
+    mobileE2E: "380ms→398ms",
+  },
+  {
+    node: "台湾-TW2",
+    path: "台湾-TW2-入",
+    unicom: "38ms→52ms",
+    telecom: "34ms→47ms",
+    mobile: "36ms→55ms",
+    unicomPL: "2%",
+    telecomPL: "1%",
+    mobilePL: "3%",
+    unicomE2E: "78ms→82ms",
+    telecomE2E: "68ms→72ms",
+    mobileE2E: "80ms→84ms",
+  },
+  {
+    node: "马来西亚-MY2",
+    path: "马来西亚-MY2-入",
+    unicom: "75ms→88ms",
+    telecom: "70ms→82ms",
+    mobile: "78ms→92ms",
+    unicomPL: "3%",
+    telecomPL: "2%",
+    mobilePL: "4%",
+    unicomE2E: "142ms→148ms",
+    telecomE2E: "132ms→138ms",
+    mobileE2E: "148ms→155ms",
+  },
+  {
+    node: "泰国-TH2",
+    path: "泰国-TH2-入",
+    unicom: "60ms→Timeout",
+    telecom: "56ms→71ms",
+    mobile: "62ms→78ms",
+    unicomPL: "38%",
+    telecomPL: "3%",
+    mobilePL: "5%",
+    unicomE2E: "112ms→Timeout",
+    telecomE2E: "108ms→115ms",
+    mobileE2E: "118ms→125ms",
+  },
 ];
 
 const ntoData = [
-  { alertType: "疑似不通", node: "US-64",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 13:40:00" },
-  { alertType: "延迟超标", node: "CN-01",  fromServer: "CN-01-SV-A", toServer: "US-64-SV-B", isp: "联通", value: "45ms → 198ms (+153ms)", triggeredAt: "2026-05-14 14:01:00" },
-  { alertType: "延迟超标", node: "CN-01",  fromServer: "CN-01-SV-A", toServer: "US-64-SV-B", isp: "移动", value: "45ms → 210ms (+165ms)", triggeredAt: "2026-05-14 14:03:00" },
-  { alertType: "丢包",     node: "CN-01",  fromServer: "CN-01-SV-B", toServer: "JP-03-SV-A", isp: "电信", value: "14%（14/100 包）",       triggeredAt: "2026-05-14 14:10:00" },
-  { alertType: "丢包",     node: "US-64",  fromServer: "US-64-SV-A", toServer: "US-64-SV-B", isp: "—",   value: "23%（23/100 包）",       triggeredAt: "2026-05-14 14:18:00" },
-  { alertType: "延迟超标", node: "US-64",  fromServer: "US-64-SV-A", toServer: "US-64-SV-C", isp: "—",   value: "8ms → 超时（>20s）",     triggeredAt: "2026-05-14 14:22:00" },
-  { alertType: "疑似不通", node: "JP-03",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 14:30:00" },
-  { alertType: "延迟超标", node: "CN-01",  fromServer: "CN-01-SV-A", toServer: "US-64-SV-B", isp: "联通", value: "45ms → 163ms (+118ms)", triggeredAt: "2026-05-14 14:55:00" },
-  { alertType: "丢包",     node: "CN-01",  fromServer: "CN-01-SV-B", toServer: "JP-03-SV-A", isp: "电信", value: "11%（11/100 包）",       triggeredAt: "2026-05-14 15:10:00" },
-  { alertType: "疑似不通", node: "US-64",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 15:22:00" },
-  { alertType: "丢包",     node: "HK-01",  fromServer: "HK-01-SV-A", toServer: "JP-03-SV-B", isp: "联通", value: "18%（18/100 包）",       triggeredAt: "2026-05-14 15:35:00" },
-  { alertType: "延迟超标", node: "SG-02",  fromServer: "SG-02-SV-A", toServer: "US-64-SV-A", isp: "移动", value: "60ms → 188ms (+128ms)", triggeredAt: "2026-05-14 15:48:00" },
-  { alertType: "疑似不通", node: "UA-01",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 16:00:00" },
-  { alertType: "丢包",     node: "DE-01",  fromServer: "DE-01-SV-A", toServer: "DE-01-SV-B", isp: "—",   value: "31%（31/100 包）",       triggeredAt: "2026-05-14 16:12:00" },
-  { alertType: "延迟超标", node: "JP-03",  fromServer: "JP-03-SV-A", toServer: "HK-01-SV-A", isp: "电信", value: "78ms → 超时（>20s）",    triggeredAt: "2026-05-14 16:20:00" },
-  { alertType: "延迟超标", node: "TW-01",  fromServer: "TW-01-SV-A", toServer: "CN-01-SV-B", isp: "联通", value: "32ms → 145ms (+113ms)", triggeredAt: "2026-05-14 16:33:00" },
-  { alertType: "丢包",     node: "MY-01",  fromServer: "MY-01-SV-A", toServer: "SG-02-SV-A", isp: "移动", value: "22%（22/100 包）",       triggeredAt: "2026-05-14 16:45:00" },
-  { alertType: "疑似不通", node: "IT-01",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 17:02:00" },
-  { alertType: "延迟超标", node: "HK-01",  fromServer: "HK-01-SV-B", toServer: "TW-01-SV-A", isp: "电信", value: "35ms → 172ms (+137ms)", triggeredAt: "2026-05-14 17:15:00" },
-  { alertType: "丢包",     node: "US-64",  fromServer: "US-64-SV-B", toServer: "DE-01-SV-A", isp: "—",   value: "17%（17/100 包）",       triggeredAt: "2026-05-14 17:28:00" },
-  { alertType: "延迟超标", node: "TH-01",  fromServer: "TH-01-SV-A", toServer: "MY-01-SV-A", isp: "联通", value: "55ms → 198ms (+143ms)", triggeredAt: "2026-05-14 17:40:00" },
-  { alertType: "疑似不通", node: "DE-01",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 17:55:00" },
-  { alertType: "丢包",     node: "JP-03",  fromServer: "JP-03-SV-B", toServer: "TW-01-SV-A", isp: "移动", value: "28%（28/100 包）",       triggeredAt: "2026-05-14 18:08:00" },
-  { alertType: "延迟超标", node: "SG-02",  fromServer: "SG-02-SV-B", toServer: "MY-01-SV-A", isp: "电信", value: "58ms → 超时（>20s）",    triggeredAt: "2026-05-14 18:20:00" },
-  { alertType: "疑似不通", node: "TH-01",  fromServer: "—",          toServer: "—",          isp: "全部", value: "超时 20s",              triggeredAt: "2026-05-14 18:35:00" },
+  {
+    alertType: "疑似不通",
+    node: "US-64",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 13:40:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "CN-01",
+    fromServer: "CN-01-SV-A",
+    toServer: "US-64-SV-B",
+    isp: "联通",
+    value: "45ms → 198ms (+153ms)",
+    triggeredAt: "2026-05-14 14:01:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "CN-01",
+    fromServer: "CN-01-SV-A",
+    toServer: "US-64-SV-B",
+    isp: "移动",
+    value: "45ms → 210ms (+165ms)",
+    triggeredAt: "2026-05-14 14:03:00",
+  },
+  {
+    alertType: "丢包",
+    node: "CN-01",
+    fromServer: "CN-01-SV-B",
+    toServer: "JP-03-SV-A",
+    isp: "电信",
+    value: "14%（14/100 包）",
+    triggeredAt: "2026-05-14 14:10:00",
+  },
+  {
+    alertType: "丢包",
+    node: "US-64",
+    fromServer: "US-64-SV-A",
+    toServer: "US-64-SV-B",
+    isp: "—",
+    value: "23%（23/100 包）",
+    triggeredAt: "2026-05-14 14:18:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "US-64",
+    fromServer: "US-64-SV-A",
+    toServer: "US-64-SV-C",
+    isp: "—",
+    value: "8ms → 超时（>20s）",
+    triggeredAt: "2026-05-14 14:22:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "JP-03",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 14:30:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "CN-01",
+    fromServer: "CN-01-SV-A",
+    toServer: "US-64-SV-B",
+    isp: "联通",
+    value: "45ms → 163ms (+118ms)",
+    triggeredAt: "2026-05-14 14:55:00",
+  },
+  {
+    alertType: "丢包",
+    node: "CN-01",
+    fromServer: "CN-01-SV-B",
+    toServer: "JP-03-SV-A",
+    isp: "电信",
+    value: "11%（11/100 包）",
+    triggeredAt: "2026-05-14 15:10:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "US-64",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 15:22:00",
+  },
+  {
+    alertType: "丢包",
+    node: "HK-01",
+    fromServer: "HK-01-SV-A",
+    toServer: "JP-03-SV-B",
+    isp: "联通",
+    value: "18%（18/100 包）",
+    triggeredAt: "2026-05-14 15:35:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "SG-02",
+    fromServer: "SG-02-SV-A",
+    toServer: "US-64-SV-A",
+    isp: "移动",
+    value: "60ms → 188ms (+128ms)",
+    triggeredAt: "2026-05-14 15:48:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "UA-01",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 16:00:00",
+  },
+  {
+    alertType: "丢包",
+    node: "DE-01",
+    fromServer: "DE-01-SV-A",
+    toServer: "DE-01-SV-B",
+    isp: "—",
+    value: "31%（31/100 包）",
+    triggeredAt: "2026-05-14 16:12:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "JP-03",
+    fromServer: "JP-03-SV-A",
+    toServer: "HK-01-SV-A",
+    isp: "电信",
+    value: "78ms → 超时（>20s）",
+    triggeredAt: "2026-05-14 16:20:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "TW-01",
+    fromServer: "TW-01-SV-A",
+    toServer: "CN-01-SV-B",
+    isp: "联通",
+    value: "32ms → 145ms (+113ms)",
+    triggeredAt: "2026-05-14 16:33:00",
+  },
+  {
+    alertType: "丢包",
+    node: "MY-01",
+    fromServer: "MY-01-SV-A",
+    toServer: "SG-02-SV-A",
+    isp: "移动",
+    value: "22%（22/100 包）",
+    triggeredAt: "2026-05-14 16:45:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "IT-01",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 17:02:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "HK-01",
+    fromServer: "HK-01-SV-B",
+    toServer: "TW-01-SV-A",
+    isp: "电信",
+    value: "35ms → 172ms (+137ms)",
+    triggeredAt: "2026-05-14 17:15:00",
+  },
+  {
+    alertType: "丢包",
+    node: "US-64",
+    fromServer: "US-64-SV-B",
+    toServer: "DE-01-SV-A",
+    isp: "—",
+    value: "17%（17/100 包）",
+    triggeredAt: "2026-05-14 17:28:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "TH-01",
+    fromServer: "TH-01-SV-A",
+    toServer: "MY-01-SV-A",
+    isp: "联通",
+    value: "55ms → 198ms (+143ms)",
+    triggeredAt: "2026-05-14 17:40:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "DE-01",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 17:55:00",
+  },
+  {
+    alertType: "丢包",
+    node: "JP-03",
+    fromServer: "JP-03-SV-B",
+    toServer: "TW-01-SV-A",
+    isp: "移动",
+    value: "28%（28/100 包）",
+    triggeredAt: "2026-05-14 18:08:00",
+  },
+  {
+    alertType: "延迟超标",
+    node: "SG-02",
+    fromServer: "SG-02-SV-B",
+    toServer: "MY-01-SV-A",
+    isp: "电信",
+    value: "58ms → 超时（>20s）",
+    triggeredAt: "2026-05-14 18:20:00",
+  },
+  {
+    alertType: "疑似不通",
+    node: "TH-01",
+    fromServer: "—",
+    toServer: "—",
+    isp: "全部",
+    value: "超时 20s",
+    triggeredAt: "2026-05-14 18:35:00",
+  },
 ];
 
 const TABS = ["带宽 (Bandwidth)", "节点状态监控", "节点触发总览"];
 
-const amber = { badge: "bg-amber-100 text-amber-800", link: "text-amber-600 hover:underline cursor-pointer", diff: "text-amber-600" };
+const amber = {
+  badge: "bg-amber-100 text-amber-800",
+  link: "text-amber-600 hover:underline cursor-pointer",
+  diff: "text-amber-600",
+};
 
 function Badge({ children }) {
   return (
@@ -80,12 +625,18 @@ function Badge({ children }) {
 }
 
 function LinkBtn({ children }) {
-  return <span className={`text-sm ${amber.link} whitespace-nowrap`}>{children}</span>;
+  return (
+    <span className={`text-sm ${amber.link} whitespace-nowrap`}>
+      {children}
+    </span>
+  );
 }
 
 function Th({ children, className = "" }) {
   return (
-    <th className={`text-left text-sm font-normal text-gray-500 px-3 py-2.5 border-b border-gray-100 whitespace-nowrap ${className}`}>
+    <th
+      className={`text-left text-sm font-normal text-gray-500 px-3 py-2.5 border-b border-gray-100 whitespace-nowrap ${className}`}
+    >
       {children}
     </th>
   );
@@ -93,7 +644,9 @@ function Th({ children, className = "" }) {
 
 function Td({ children, className = "" }) {
   return (
-    <td className={`px-3 py-2.5 text-sm border-b border-gray-100 align-middle ${className}`}>
+    <td
+      className={`px-3 py-2.5 text-sm border-b border-gray-100 align-middle ${className}`}
+    >
       {children}
     </td>
   );
@@ -125,8 +678,12 @@ function BandwidthTab() {
                 <span className="text-gray-500">{r.cap}</span>
               </span>
             </Td>
-            <Td><Badge>{r.period}</Badge></Td>
-            <Td><LinkBtn>查看服务器详情</LinkBtn></Td>
+            <Td>
+              <Badge>{r.period}</Badge>
+            </Td>
+            <Td>
+              <LinkBtn>查看服务器详情</LinkBtn>
+            </Td>
           </tr>
         ))}
       </tbody>
@@ -137,14 +694,22 @@ function BandwidthTab() {
 function PacketLossCell({ value }) {
   const pct = parseInt(value);
   const isHigh = pct > 10;
-  return <span className={isHigh ? "text-red-500 font-medium" : "text-green-600"}>{value}</span>;
+  return (
+    <span className={isHigh ? "text-red-500 font-medium" : "text-green-600"}>
+      {value}
+    </span>
+  );
 }
 
 function LatencyCell({ value }) {
   const [before, after] = value.split("→");
   const isTimeout = after === "Timeout";
   const diff = isTimeout ? Infinity : parseInt(after) - parseInt(before);
-  const color = isTimeout ? "text-red-500" : diff > 100 ? "text-amber-600" : "text-green-600";
+  const color = isTimeout
+    ? "text-red-500"
+    : diff > 100
+      ? "text-amber-600"
+      : "text-green-600";
   return (
     <span className="whitespace-nowrap">
       <span className="text-gray-400">{before}→</span>
@@ -153,35 +718,72 @@ function LatencyCell({ value }) {
   );
 }
 
-function ISPPill({ label, latency, pl }) {
+// 0=green 1=yellow 2=red
+function severityLevel(latency, pl) {
   const [before, after] = latency.split("→");
   const isTimeout = after === "Timeout";
   const latencyDiff = isTimeout ? Infinity : parseInt(after) - parseInt(before);
   const plPct = parseInt(pl);
-  const isLatencyBad = isTimeout || latencyDiff > 100;
-  const isPLBad = plPct > 10;
-  const isBad = isLatencyBad || isPLBad;
 
-  const dot = isTimeout ? "bg-red-400" : isBad ? "bg-amber-400" : "bg-green-400";
+  const latencySev = isTimeout || latencyDiff >= 100 ? 2 : 0;
+  const plSev = plPct > 10 ? 2 : plPct > 1 ? 1 : 0;
+  return Math.max(latencySev, plSev);
+}
+
+const SEV_STYLES = [
+  { dot: "bg-green-400" },
+  { dot: "bg-amber-400" },
+  { dot: "bg-red-400" },
+];
+
+function ISPPill({ label, latency, pl, e2e }) {
+  const [before, after] = latency.split("→");
+  const isTimeout = after === "Timeout";
+  const latencyDiff = isTimeout ? Infinity : parseInt(after) - parseInt(before);
+  const plPct = parseInt(pl);
+
+  const sev = severityLevel(latency, pl);
+  const { dot } = SEV_STYLES[sev];
+
+  const latencyColor =
+    isTimeout || latencyDiff >= 100 ? "text-red-500" : "text-gray-600";
+  const plColor =
+    plPct > 10
+      ? "text-red-500"
+      : plPct > 1
+        ? "text-amber-600"
+        : "text-gray-600";
+  const [e2eBefore, e2eAfter] = e2e ? e2e.split("→") : [];
+  const e2eIsTimeout = e2eAfter === "Timeout";
+  const e2eDiff = e2eIsTimeout
+    ? Infinity
+    : parseInt(e2eAfter) - parseInt(e2eBefore);
+  const e2eColor =
+    e2eIsTimeout || e2eDiff >= 100 ? "text-red-500" : "text-gray-600";
 
   return (
-    <div className="inline-flex flex-col gap-1 px-3 py-2 rounded-lg border border-gray-100 bg-gray-50 text-xs w-[150px]">
+    <div className="inline-flex flex-col gap-1 px-3 py-2 rounded-lg border border-gray-100 bg-gray-50 text-xs w-47.5">
       <div className="flex items-center gap-1.5">
         <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
         <span className="font-medium text-gray-700">{label}</span>
       </div>
       <div className="text-gray-400 leading-none">
-        {before}→<span className={isTimeout ? "text-red-500" : latencyDiff > 100 ? "text-amber-600" : "text-gray-600"}>{after}</span>
+        中继 {before}→<span className={latencyColor}>{after}</span>
       </div>
+      {e2e !== undefined && (
+        <div className="text-gray-400 leading-none">
+          端到端 {e2eBefore}→<span className={e2eColor}>{e2eAfter}</span>
+        </div>
+      )}
       <div className="text-gray-400 leading-none">
-        丢包 <span className={isPLBad ? "text-red-500" : "text-gray-600"}>{pl}</span>
+        丢包 <span className={plColor}>{pl}</span>
       </div>
     </div>
   );
 }
 
 function fmt(d) {
-  const pad = n => String(n).padStart(2, "0");
+  const pad = (n) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
@@ -200,7 +802,7 @@ function FilterPills({ options, value, onChange }) {
       >
         全部
       </button>
-      {options.map(opt => (
+      {options.map((opt) => (
         <button
           key={opt}
           onClick={() => onChange(value === opt ? null : opt)}
@@ -220,17 +822,26 @@ function FilterPills({ options, value, onChange }) {
 function NodeLatencyTab() {
   const [lastUpdated, setLastUpdated] = useState(() => fmt(new Date()));
   const [country, setCountry] = useState(null);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setLastUpdated(fmt(new Date()));
-      setPage(1);
-    }, 15 * 60 * 1000);
+    const id = setInterval(
+      () => {
+        setLastUpdated(fmt(new Date()));
+        setPage(1);
+      },
+      15 * 60 * 1000,
+    );
     return () => clearInterval(id);
   }, []);
 
-  const filtered = country ? nlData.filter(r => r.node.startsWith(country)) : nlData;
+  const q = search.trim().toLowerCase();
+  const filtered = nlData.filter((r) => {
+    const matchCountry = !country || r.node.startsWith(country);
+    const matchSearch = !q || r.node.toLowerCase().includes(q) || r.path.toLowerCase().includes(q);
+    return matchCountry && matchSearch;
+  });
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageData = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -239,21 +850,52 @@ function NodeLatencyTab() {
     setPage(1);
   }
 
+  function handleSearch(e) {
+    setSearch(e.target.value);
+    setPage(1);
+  }
+
   return (
     <div className="overflow-x-auto">
-      {/* Country filter */}
-      <div className="pt-3 pb-2">
-        <FilterPills options={COUNTRIES} value={country} onChange={handleCountry} />
-      </div>
-
-      {/* Last updated */}
-      <div className="flex items-center gap-1.5 py-2 text-xs text-gray-400">
-        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9" strokeWidth="1.5"/>
-          <polyline points="12 7 12 12 15.5 14" strokeWidth="1.5"/>
-        </svg>
-        最后更新：<span className="text-gray-600 font-medium">{lastUpdated}</span>
-        <span className="ml-1 text-gray-300">· 每 15 分钟自动刷新</span>
+      {/* Search + Last updated + Country filter */}
+      <div className="pt-3 pb-2 flex flex-col gap-2">
+        <div className="flex items-center gap-3">
+          <div className="relative w-64">
+            <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" strokeWidth="1.5"/>
+              <line x1="16.5" y1="16.5" x2="21" y2="21" strokeWidth="1.5"/>
+            </svg>
+            <input
+              type="text"
+              value={search}
+              onChange={handleSearch}
+              placeholder="搜索地区或节点名称…"
+              className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-amber-400"
+            />
+            {search && (
+              <button onClick={() => { setSearch(""); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18" strokeWidth="2"/>
+                  <line x1="6" y1="6" x2="18" y2="18" strokeWidth="2"/>
+                </svg>
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" strokeWidth="1.5" />
+              <polyline points="12 7 12 12 15.5 14" strokeWidth="1.5" />
+            </svg>
+            最后更新：
+            <span className="text-gray-600 font-medium">{lastUpdated}</span>
+            <span className="ml-1 text-gray-300">· 每 15 分钟自动刷新</span>
+          </div>
+        </div>
+        <FilterPills
+          options={COUNTRIES}
+          value={country}
+          onChange={handleCountry}
+        />
       </div>
 
       <table className="w-full border-collapse">
@@ -268,7 +910,12 @@ function NodeLatencyTab() {
         <tbody>
           {pageData.length === 0 ? (
             <tr>
-              <td colSpan={4} className="px-3 py-8 text-center text-sm text-gray-400">暂无该地区的节点数据</td>
+              <td
+                colSpan={4}
+                className="px-3 py-8 text-center text-sm text-gray-400"
+              >
+                暂无该地区的节点数据
+              </td>
             </tr>
           ) : (
             pageData.map((r, i) => (
@@ -277,12 +924,29 @@ function NodeLatencyTab() {
                 <Td className="text-gray-500 whitespace-nowrap">{r.path}</Td>
                 <Td>
                   <div className="flex gap-2">
-                    <ISPPill label="联通" latency={r.unicom} pl={r.unicomPL} />
-                    <ISPPill label="电信" latency={r.telecom} pl={r.telecomPL} />
-                    <ISPPill label="移动" latency={r.mobile} pl={r.mobilePL} />
+                    <ISPPill
+                      label="联通"
+                      latency={r.unicom}
+                      pl={r.unicomPL}
+                      e2e={r.unicomE2E}
+                    />
+                    <ISPPill
+                      label="电信"
+                      latency={r.telecom}
+                      pl={r.telecomPL}
+                      e2e={r.telecomE2E}
+                    />
+                    <ISPPill
+                      label="移动"
+                      latency={r.mobile}
+                      pl={r.mobilePL}
+                      e2e={r.mobileE2E}
+                    />
                   </div>
                 </Td>
-                <Td><LinkBtn>查看节点详情</LinkBtn></Td>
+                <Td>
+                  <LinkBtn>查看节点详情</LinkBtn>
+                </Td>
               </tr>
             ))
           )}
@@ -295,20 +959,47 @@ function NodeLatencyTab() {
           共 {filtered.length} 条，第 {page} / {totalPages} 页
         </span>
         <div className="flex items-center gap-1">
-          <button onClick={() => setPage(1)} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">«</button>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">‹</button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
-            <button key={n} onClick={() => setPage(n)}
+          <button
+            onClick={() => setPage(1)}
+            disabled={page === 1}
+            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            «
+          </button>
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            ‹
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            <button
+              key={n}
+              onClick={() => setPage(n)}
               className={`px-2.5 py-1 text-xs rounded border transition-colors ${
-                n === page ? "bg-amber-500 text-white border-amber-500" : "border-gray-200 text-gray-500 hover:bg-gray-50"
-              }`}>{n}</button>
+                n === page
+                  ? "bg-amber-500 text-white border-amber-500"
+                  : "border-gray-200 text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              {n}
+            </button>
           ))}
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">›</button>
-          <button onClick={() => setPage(totalPages)} disabled={page === totalPages}
-            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed">»</button>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            ›
+          </button>
+          <button
+            onClick={() => setPage(totalPages)}
+            disabled={page === totalPages}
+            className="px-2 py-1 text-xs rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            »
+          </button>
         </div>
       </div>
     </div>
@@ -316,35 +1007,42 @@ function NodeLatencyTab() {
 }
 
 const alertStyles = {
-  "疑似不通":   { badge: "bg-red-100 text-red-600",    value: "text-red-500"   },
-  "延迟超标": { badge: "bg-amber-100 text-amber-700", value: "text-amber-600" },
-  "丢包":     { badge: "bg-blue-100 text-blue-600",   value: "text-blue-500"  },
+  疑似不通: { badge: "bg-red-100 text-red-600", value: "text-red-500" },
+  延迟超标: { badge: "bg-amber-100 text-amber-700", value: "text-amber-600" },
+  丢包: { badge: "bg-blue-100 text-blue-600", value: "text-blue-500" },
 };
 
 function AlertTypeBadge({ type }) {
   const style = alertStyles[type] ?? { badge: "bg-gray-100 text-gray-600" };
   return (
-    <span className={`text-xs px-2 py-0.5 rounded font-medium whitespace-nowrap ${style.badge}`}>
+    <span
+      className={`text-xs px-2 py-0.5 rounded font-medium whitespace-nowrap ${style.badge}`}
+    >
       {type}
     </span>
   );
 }
 
 const COUNTRIES = [
-  "美国", "新加坡", "泰国", "日本", "乌克兰",
-  "香港", "德国", "马来西亚", "台湾", "意大利",
+  "美国",
+  "新加坡",
+  "泰国",
+  "日本",
+  "乌克兰",
+  "香港",
+  "德国",
+  "马来西亚",
+  "台湾",
+  "意大利",
 ];
 
 const ALERT_TYPES = ["疑似不通", "延迟超标", "丢包"];
-const ISPS        = ["联通", "电信", "移动"];
 
 function NodeTriggerOverviewTab() {
   const [alertType, setAlertType] = useState(null);
-  const [isp, setIsp] = useState(null);
 
-  const filtered = ntoData.filter(r =>
-    (!alertType || r.alertType === alertType) &&
-    (!isp || r.isp === isp)
+  const filtered = ntoData.filter(
+    (r) => !alertType || r.alertType === alertType,
   );
 
   return (
@@ -353,11 +1051,11 @@ function NodeTriggerOverviewTab() {
       <div className="flex flex-col gap-2 pt-3 pb-2">
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-400 w-12 shrink-0">告警类型</span>
-          <FilterPills options={ALERT_TYPES} value={alertType} onChange={setAlertType} />
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-400 w-12 shrink-0">运营商</span>
-          <FilterPills options={ISPS} value={isp} onChange={setIsp} />
+          <FilterPills
+            options={ALERT_TYPES}
+            value={alertType}
+            onChange={setAlertType}
+          />
         </div>
       </div>
 
@@ -368,7 +1066,6 @@ function NodeTriggerOverviewTab() {
             <Th>节点</Th>
             <Th>源服务器</Th>
             <Th>目标服务器</Th>
-            <Th>运营商</Th>
             <Th>数值</Th>
             <Th>触发时间</Th>
             <Th>操作</Th>
@@ -377,23 +1074,41 @@ function NodeTriggerOverviewTab() {
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={8} className="px-3 py-8 text-center text-sm text-gray-400">
+              <td
+                colSpan={7}
+                className="px-3 py-8 text-center text-sm text-gray-400"
+              >
                 暂无符合条件的触发记录
               </td>
             </tr>
           ) : (
             filtered.map((r, i) => {
-              const style = alertStyles[r.alertType] ?? { value: "text-gray-600" };
+              const style = alertStyles[r.alertType] ?? {
+                value: "text-gray-600",
+              };
               return (
                 <tr key={i} className="hover:bg-gray-50">
-                  <Td><AlertTypeBadge type={r.alertType} /></Td>
+                  <Td>
+                    <AlertTypeBadge type={r.alertType} />
+                  </Td>
                   <Td className="font-medium whitespace-nowrap">{r.node}</Td>
-                  <Td className="text-gray-500 whitespace-nowrap">{r.fromServer}</Td>
-                  <Td className="text-gray-500 whitespace-nowrap">{r.toServer}</Td>
-                  <Td className="text-gray-500">{r.isp}</Td>
-                  <Td className={`whitespace-nowrap font-medium ${style.value}`}>{r.value}</Td>
-                  <Td className="text-gray-400 whitespace-nowrap">{r.triggeredAt}</Td>
-                  <Td><LinkBtn>查看节点详情</LinkBtn></Td>
+                  <Td className="text-gray-500 whitespace-nowrap">
+                    {r.fromServer}
+                  </Td>
+                  <Td className="text-gray-500 whitespace-nowrap">
+                    {r.toServer}
+                  </Td>
+                  <Td
+                    className={`whitespace-nowrap font-medium ${style.value}`}
+                  >
+                    {r.value}
+                  </Td>
+                  <Td className="text-gray-400 whitespace-nowrap">
+                    {r.triggeredAt}
+                  </Td>
+                  <Td>
+                    <LinkBtn>查看节点详情</LinkBtn>
+                  </Td>
                 </tr>
               );
             })
@@ -433,14 +1148,19 @@ function DateTimeRangePicker({ value, onChange }) {
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5"/>
-          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5"/>
-          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5"/>
-          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5"/>
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.5" />
+          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="1.5" />
+          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="1.5" />
+          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="1.5" />
         </svg>
         {formatDisplay(value.start)} — {formatDisplay(value.end)}
       </button>
@@ -453,7 +1173,12 @@ function DateTimeRangePicker({ value, onChange }) {
               <input
                 type="datetime-local"
                 value={toInputVal(draft.start)}
-                onChange={e => setDraft(d => ({ ...d, start: fromInputVal(e.target.value) }))}
+                onChange={(e) =>
+                  setDraft((d) => ({
+                    ...d,
+                    start: fromInputVal(e.target.value),
+                  }))
+                }
                 className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
               />
             </div>
@@ -462,7 +1187,9 @@ function DateTimeRangePicker({ value, onChange }) {
               <input
                 type="datetime-local"
                 value={toInputVal(draft.end)}
-                onChange={e => setDraft(d => ({ ...d, end: fromInputVal(e.target.value) }))}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, end: fromInputVal(e.target.value) }))
+                }
                 className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:border-amber-400"
               />
             </div>
@@ -520,16 +1247,26 @@ export default function ServerTriggerRecords() {
         <div className="flex items-center gap-2 pb-1.5">
           <DateTimeRangePicker value={dateRange} onChange={setDateRange} />
           <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5"/>
-              <line x1="8" y1="12" x2="16" y2="12" strokeWidth="1.5"/>
-              <line x1="11" y1="18" x2="13" y2="18" strokeWidth="1.5"/>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <line x1="4" y1="6" x2="20" y2="6" strokeWidth="1.5" />
+              <line x1="8" y1="12" x2="16" y2="12" strokeWidth="1.5" />
+              <line x1="11" y1="18" x2="13" y2="18" strokeWidth="1.5" />
             </svg>
           </button>
           <button className="flex items-center gap-1 text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50">
             列
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <polyline points="6 9 12 15 18 9" strokeWidth="2"/>
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <polyline points="6 9 12 15 18 9" strokeWidth="2" />
             </svg>
           </button>
         </div>
