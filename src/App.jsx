@@ -766,14 +766,14 @@ function ISPPill({ label, latency, pl, e2e }) {
         <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
         <span className="font-medium text-gray-700">{label}</span>
       </div>
-      <div className="text-gray-400 leading-none">
-        中继 {before}→<span className={latencyColor}>{after}</span>
-      </div>
       {e2e !== undefined && (
         <div className="text-gray-400 leading-none">
           端到端 <span className={e2eColor}>{e2eAfter}</span>
         </div>
       )}
+      <div className="text-gray-400 leading-none">
+        中继 {before}→<span className={latencyColor}>{after}</span>
+      </div>
       <div className="text-gray-400 leading-none">
         丢包 <span className={plColor}>{pl}</span>
       </div>
