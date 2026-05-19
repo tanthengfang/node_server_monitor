@@ -758,8 +758,7 @@ function ISPPill({ label, latency, pl, e2e }) {
   const e2eDiff = e2eIsTimeout
     ? Infinity
     : parseInt(e2eAfter) - parseInt(e2eBefore);
-  const e2eColor =
-    e2eIsTimeout || e2eDiff >= 100 ? "text-red-500" : "text-gray-600";
+  const e2eColor = e2eIsTimeout ? "text-red-500" : "text-gray-900";
 
   return (
     <div className="inline-flex flex-col gap-1 px-3 py-2 rounded-lg border border-gray-100 bg-gray-50 text-xs w-47.5">
@@ -772,7 +771,7 @@ function ISPPill({ label, latency, pl, e2e }) {
       </div>
       {e2e !== undefined && (
         <div className="text-gray-400 leading-none">
-          端到端 {e2eBefore}→<span className={e2eColor}>{e2eAfter}</span>
+          端到端 <span className={e2eColor}>{e2eAfter}</span>
         </div>
       )}
       <div className="text-gray-400 leading-none">
