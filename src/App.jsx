@@ -1039,23 +1039,46 @@ const ALERT_TYPES = ["疑似不通", "延迟超标", "丢包"];
 
 function NodeTriggerOverviewTab() {
   const [alertType, setAlertType] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const filtered = ntoData.filter(
-    (r) => !alertType || r.alertType === alertType,
-  );
+  const q = search.trim().toLowerCase();
+  const filtered = ntoData.filter((r) => {
+    const matchType = !alertType || r.alertType === alertType;
+    const matchSearch = !q || r.node.toLowerCase().includes(q);
+    return matchType && matchSearch;
+  });
 
   return (
     <div>
       {/* Filters */}
-      <div className="flex flex-col gap-2 pt-3 pb-2">
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-400 w-12 shrink-0">告警类型</span>
-          <FilterPills
-            options={ALERT_TYPES}
-            value={alertType}
-            onChange={setAlertType}
+      <div className="flex items-center gap-3 pt-3 pb-2">
+        <div className="relative w-48 shrink-0">
+          <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" strokeWidth="1.5"/>
+            <line x1="16.5" y1="16.5" x2="21" y2="21" strokeWidth="1.5"/>
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="搜索节点名称…"
+            className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-amber-400"
           />
+          {search && (
+            <button onClick={() => setSearch("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <line x1="18" y1="6" x2="6" y2="18" strokeWidth="2"/>
+                <line x1="6" y1="6" x2="18" y2="18" strokeWidth="2"/>
+              </svg>
+            </button>
+          )}
         </div>
+        <span className="text-xs text-gray-400 shrink-0">告警类型</span>
+        <FilterPills
+          options={ALERT_TYPES}
+          value={alertType}
+          onChange={setAlertType}
+        />
       </div>
 
       <table className="w-full border-collapse">
