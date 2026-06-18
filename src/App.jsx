@@ -1008,6 +1008,7 @@ function NodeLatencyTab() {
 const alertStyles = {
   疑似不通: { badge: "bg-red-100 text-red-600", value: "text-red-500" },
   延迟超标: { badge: "bg-amber-100 text-amber-700", value: "text-amber-600" },
+  超时: { badge: "bg-orange-100 text-orange-600", value: "text-orange-500" },
   丢包: { badge: "bg-blue-100 text-blue-600", value: "text-blue-500" },
 };
 
@@ -1035,7 +1036,7 @@ const COUNTRIES = [
   "意大利",
 ];
 
-const ALERT_TYPES = ["疑似不通", "延迟超标", "丢包"];
+const ALERT_TYPES = ["疑似不通", "延迟超标", "超时", "丢包"];
 
 function NodeTriggerOverviewTab() {
   const [alertType, setAlertType] = useState(null);
@@ -1043,7 +1044,12 @@ function NodeTriggerOverviewTab() {
 
   const q = search.trim().toLowerCase();
   const filtered = ntoData.filter((r) => {
-    const matchType = !alertType || r.alertType === alertType;
+    const matchType = !alertType
+      || (alertType === "超时"
+        ? r.alertType === "延迟超标" && r.value.includes("超时")
+        : alertType === "延迟超标"
+          ? r.alertType === "延迟超标" && !r.value.includes("超时")
+          : r.alertType === alertType);
     const matchSearch = !q || r.node.toLowerCase().includes(q);
     return matchType && matchSearch;
   });
@@ -1105,13 +1111,12 @@ function NodeTriggerOverviewTab() {
             </tr>
           ) : (
             filtered.map((r, i) => {
-              const style = alertStyles[r.alertType] ?? {
-                value: "text-gray-600",
-              };
+              const displayType = r.alertType === "延迟超标" && r.value.includes("超时") ? "超时" : r.alertType;
+              const style = alertStyles[displayType] ?? alertStyles[r.alertType] ?? { value: "text-gray-600" };
               return (
                 <tr key={i} className="hover:bg-gray-50">
                   <Td>
-                    <AlertTypeBadge type={r.alertType} />
+                    <AlertTypeBadge type={displayType} />
                   </Td>
                   <Td className="font-medium whitespace-nowrap">{r.node}</Td>
                   <Td className="text-gray-500 whitespace-nowrap">
